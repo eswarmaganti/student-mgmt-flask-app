@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block heading %}
+Students Details
+{%endblock%}
+
+{% block content %}
+<div class="container">
+<!--    <h4 class="font-satisfy text-primary text-center py-4 text-decoration-underline">Students Page</h4>-->
+    <table class="py-2 mb-5 table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                {% for heading in headings %}
+                    <td>{{heading}}</td>
+                {% endfor %}
+            </tr>
+        </thead>
+        {% for student in students%}
+            <tr>
+                <td>{{student.id}}</td>
+                <td>{{student.first_name}}</td>
+                <td>{{student.last_name}}</td>
+                <td>{{student.email}}</td>
+                <td>
+                    <a href="{{url_for('view_student', student_id=student.id)}}" class="text-info">
+                        <button class="btn btn-sm btn-info">
+                            <i class="bi bi-box-arrow-up-right"></i>
+                        </button>
+                    </a>
+                </td>
+                <td class="d-flex gap-4">
+                    <a href="{{url_for('edit_student', student_id=student.id)}}" class="text-warning" >
+                        <button class="btn btn-sm btn-warning">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                    </a>
+                    <form action="{{url_for('delete_student',student_id=student.id)}}" method="POST" >
+
+                        <button type="submit"  class="btn btn-sm btn-danger">
+                            <i class="bi bi-trash3-fill"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+</div>
+{% endblock %}
