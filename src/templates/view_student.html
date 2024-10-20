@@ -1,0 +1,22 @@
+{% extends 'base.html'%}
+
+{% block content %}
+<div class="col-md-4 container mb-5">
+<a href="{{url_for('get_students')}}">
+    <button class="btn btn-sm btn-dark"> <i class="bi bi-arrow-left"></i> Back</button>
+</a>
+<div class="card  mt-3">
+    <div class="card-header text-bg-info">
+        <h5 class="card-title">{{student.first_name+' '+ student.last_name}}</h5>
+    </div>
+    <div class="card-body">
+        <h6 class="card-subtitle">{{student.bio}}</h6>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">Age: {{student.age}} years </li>
+        <li class="list-group-item">Created: {{student.created_at}}</li>
+        <li class="list-group-item">Updated: {{student.updated_at}}</li>
+    </ul>
+</div>
+</div>
+{% endblock %}

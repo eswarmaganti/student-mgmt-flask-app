@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="col-md-6 container">
+    <form method="POST">
+        <div class="mb-3">
+            <label for="first_name" class="pb-1">First Name *</label>
+            <input value={{student.first_name}} type="text" name="first_name" id="first_name" class="form-control" placeholder="Enter your first name" required/>
+        </div>
+        <div class="mb-3">
+            <label value={{student.last_name}} for="last_name" class="pb-1">Last Name *</label>
+            <input type="text" name="last_name" id="last_name" class="form-control" placeholder="Enter your last name" required/>
+        </div><div class="mb-3">
+            <label for="email" class="pb-1">Email Address *</label>
+            <input value={{student.email}} type="email" name="email" id="email" class="form-control" placeholder="example@example.com" required/>
+        </div>
+        <div class="mb-3">
+            <label for="age" class="pb-1">Age *</label>
+            <input value={{student.age}} type="number" name="age" id="age" class="form-control" required/>
+        </div>
+        <div class="mb-3">
+            <label for="bio" class="pb-1">Bio</label>
+            <textarea name="bio" id="bio" class="form-control" placeholder="Add your bio here">{{student.bio}}</textarea>
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-person-check-fill"></i>
+                <span class="ml-2">Update</span>
+            </button>
+        </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
