@@ -8,7 +8,7 @@ from datetime import datetime
 # create a flask app
 app = Flask(__name__)
 # database connectivity
-db_path = Path().cwd() / 'src/db/database.db'
+db_path = Path().cwd() / 'db/database.db'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + str(db_path)
 
