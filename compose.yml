@@ -1,0 +1,14 @@
+services:
+  student-mgmt-flask-app:
+    build:
+      context: .
+    image: student-mgmt-flask-app:latest
+    pull_policy: build
+    restart: on-failure
+    ports:
+      - "8000:8000"
+    networks:
+      - backend
+networks:
+  backend:
+    driver: bridge
