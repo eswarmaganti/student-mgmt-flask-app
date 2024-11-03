@@ -2,7 +2,15 @@
 
 {% block content %}
 <div class="col-md-6 container">
-    <form method="POST">
+    <a href="{{url_for('index')}}">
+        <button class="btn btn-dark btn-sm">
+            <i class="bi bi-chevron-left"></i>
+            <span class="ml-2">
+                Back
+            </span>
+        </button>
+    </a>
+    <form method="POST" class="mt-4">
         <div class="mb-3">
             <label for="first_name" class="pb-1">First Name *</label>
             <input value={{student.first_name}} type="text" name="first_name" id="first_name" class="form-control" placeholder="Enter your first name" required/>
