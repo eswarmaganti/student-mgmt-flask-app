@@ -125,7 +125,3 @@ def delete_student(student_id):
     db.session.commit()
     return redirect(url_for('get_students'))
 
-
-## running the app
-if __name__ == "__main__":
-    app.run(port="0.0.0.0")
