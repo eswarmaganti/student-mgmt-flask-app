@@ -1,0 +1,14 @@
+# metadata for the service
+[Unit]
+Description=Gunicorn Instance for the student-mgmt-flask-app
+After=network.target
+
+[Service]
+User=ubuntu
+Group=ubuntu
+WorkingDir=/opt/SP/student-mgmt-flask-app
+environment='PATH=/opt/SP/student-mgmt-flask-app/venv/bin'
+ExecStart=/opt/SP/student-mgmt-flask-app/venv/bin/gunicorn -w 4 -t 3 --bind 0.0.0.0:8000 main:app
+
+[Install]
+WantedBy=multi-user.target
