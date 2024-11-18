@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
+{% from "includes/form_input.html" import render_input_field with context %}
 
 {% block content %}
 <div class="col-md-6 container">
-    <a href="{{url_for('index')}}">
+    <a href="{{url_for('get_students')}}">
         <button class="btn btn-dark btn-sm">
             <i class="bi bi-chevron-left"></i>
             <span class="ml-2">
@@ -10,25 +11,20 @@
             </span>
         </button>
     </a>
-    <form method="POST" class="mt-4">
-        <div class="mb-3">
-            <label for="first_name" class="pb-1">First Name *</label>
-            <input value={{student.first_name}} type="text" name="first_name" id="first_name" class="form-control" placeholder="Enter your first name" required/>
-        </div>
-        <div class="mb-3">
-            <label  for="last_name" class="pb-1">Last Name *</label>
-            <input value={{student.last_name}} type="text" name="last_name" id="last_name" class="form-control" placeholder="Enter your last name" required/>
-        </div><div class="mb-3">
-            <label for="email" class="pb-1">Email Address *</label>
-            <input value={{student.email}} type="email" name="email" id="email" class="form-control" placeholder="example@example.com" required/>
-        </div>
-        <div class="mb-3">
-            <label for="age" class="pb-1">Age *</label>
-            <input value={{student.age}} type="number" name="age" id="age" class="form-control" required/>
-        </div>
+    <form method="POST" class="my-4">
+        {{render_input_field(field=form.first_name, label="First Name *", placeholder="Enter your First Name...", value=student.first_name)}}
+        {{render_input_field(field=form.last_name, label="Last Name *", placeholder="Enter your Last Name...", value=student.last_name)}}
+        {{render_input_field(field=form.email, label="Email Address *", placeholder="Enter your Email Address...", value=student.email)}}
+        {{render_input_field(field=form.date_of_birth, label="Date of Birth *", placeholder="Enter your Date of Birth...", value=student.date_of_birth)}}
         <div class="mb-3">
             <label for="bio" class="pb-1">Bio</label>
-            <textarea name="bio" id="bio" class="form-control" placeholder="Add your bio here">{{student.bio}}</textarea>
+            <textarea placeholder="Enter your Bio.." class="form-control" name="bio" id="bio" >{{student.bio}}</textarea>
+            {% if form.bio.errors %}
+                {% for error in form.bio.errors %}
+                    <div class="form-text text-danger">{{error}}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
         <div class="mt-3">
             <button type="submit" class="btn btn-primary">
                 <i class="bi bi-person-check-fill"></i>

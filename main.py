@@ -1,9 +1,11 @@
 import traceback
-
+import bcrypt
 from flask import Flask, render_template, request, redirect, url_for
 from pathlib import Path
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from datetime import datetime, date
+from schemas import RegisterStudentForm, EditStudentForm, SearchStudentForm
+
 
 # create a flask app
 app = Flask(__name__)
@@ -16,8 +18,6 @@ db = SQLAlchemy(app)
 
 # importing the models after db is initialized
 from models import Student
-
-
 
 # defining the routes for the application
 
@@ -38,19 +38,28 @@ description: route to create a new student in database
 '''
 @app.route('/add_student', methods=('GET','POST'))
 def add_student():
-    if request.method == 'POST':
-        first_name: str = request.form.get('first_name', '').strip()
-        last_name: str = request.form.get('last_name', '').strip()
-        email: str = request.form.get('email', '').strip()
-        age: int = request.form.get('age',None)
-        bio: str = request.form.get('first_name', '').strip()
+    form = RegisterStudentForm(request.form)
 
-        student = Student(first_name=first_name,last_name=last_name,email=email,age=age,bio=bio)
-        db.session.add(student)
-        db.session.commit()
+    if request.method == 'POST' and form.validate():
+        try:
+            # mapping the data from request form
+            first_name: str = request.form.get('first_name', '').strip()
+            last_name: str = request.form.get('last_name', '').strip()
+            email: str = request.form.get('email', '').strip()
+            date_of_birth: datetime = datetime.strptime(request.form.get('date_of_birth').strip(),'%Y-%m-%d')
+            bio: str = request.form.get('bio', '').strip()
+            password: str = request.form.get('password','').strip()
 
-        return redirect(url_for('get_students'))
-    return render_template('add_student.html', page_heading="Add a New Student")
+            hashed_pass = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            student = Student(first_name=first_name,last_name=last_name,email=email,date_of_birth=date_of_birth,bio=bio,password=hashed_pass)
+            db.session.add(student)
+            db.session.commit()
+            return render_template('add_student.html',page_heading="Add a New Student", form=form, status="success")
+        except Exception as e:
+            traceback.print_exc()
+            return render_template('add_student.html',page_heading="Add a New Student", form=form, status="error")
+
+    return render_template('add_student.html', page_heading="Add a New Student",form=form )
 
 
 '''
@@ -77,7 +86,7 @@ def get_students():
         students = Student.query.all()
 
         # table headings
-        headings = ('ID', 'First Name', 'Last Name', 'Email', 'View', 'Action')
+        headings = ('ID', 'First Name', 'Last Name', 'Email','Date of Birth' ,'View', 'Action')
 
         # rendering the template
         return render_template('students.html',page_heading='Students Details', headings=headings, students=students)
@@ -93,24 +102,31 @@ description: route to handle the edit functionality of students
 '''
 @app.route('/edit_student/<int:student_id>', methods=('GET','POST'))
 def edit_student(student_id):
+
     student = Student.query.get_or_404(student_id)
-    if request.method == 'POST':
+    form = EditStudentForm(request.form)
 
-        # updating the existing student details
-        student.first_name = request.form.get('first_name','')
-        student.last_name = request.form.get('last_name','')
-        student.email = request.form.get('email')
-        student.age = request.form.get('age')
-        student.bio = request.form.get('bio')
-        student.updated_at = datetime.now()
+    if request.method == 'POST' and form.validate():
+        try:
+            # updating the existing student details
+            student.first_name = request.form.get('first_name','')
+            student.last_name = request.form.get('last_name','')
+            student.email = request.form.get('email')
+            student.date_of_birth = datetime.strptime(request.form.get('date_of_birth'), '%Y-%m-%d')
+            student.bio = request.form.get('bio')
+            student.updated_at = datetime.now()
 
-        # commiting the changes
-        db.session.commit()
+            # commiting the changes
+            db.session.commit()
 
-        # redirect to students page
-        return redirect(url_for('get_students'))
+            # redirect to students page
+            return render_template('edit_student.html', page_heading='Edit Student Details', student=student, status="success", form=form)
+        except Exception as e:
+            traceback.print_exc()
+            return render_template('edit_student.html', page_heading='Edit Student Details', student=student, status="error", form=form)
 
-    return render_template('edit_student.html', page_heading='Edit Student Details', student=student)
+
+    return render_template('edit_student.html', page_heading='Edit Student Details', student=student, form=form)
 
 
 '''
@@ -125,3 +141,17 @@ def delete_student(student_id):
     db.session.commit()
     return redirect(url_for('get_students'))
 
+@app.route('/search_students', methods=('GET','POST'))
+def search_students():
+
+    form = SearchStudentForm(request.form)
+    if request.method == "POST" and form.validate():
+        student_name = request.form.get('student_name','')
+        students = Student.query.filter(Student.first_name.like(f'{student_name}%')).all()
+        print(students)
+        return  render_template('search_students.html', students=students, form=form)
+    return render_template('search_students.html', form=form)
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", PORT="8000")
