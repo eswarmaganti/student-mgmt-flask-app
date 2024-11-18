@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% from "/includes/form_input.html" import render_input_field with context%}
+
+{% block content %}
+<div class="container col-md-6">
+    <form action="" method="POST" novalidate>
+        {{render_input_field(field=form.student_name, placeholder="Enter Student Name ...", label="Student Name *")}}
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+    <div class="container my-5">
+        {% if students %}
+            <ul class="list-group">
+                {% for student in students %}
+                    <li class="list-group-item">
+                        <a class="text-decoration-none" href="{{url_for('view_student',student_id=student.id)}}" >{{student.first_name+' '+student.last_name}} <span><i class="bi bi-box-arrow-up-right"></i></span></a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="alert alert-info text-center">
+                No Students Found
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+{%endblock%}

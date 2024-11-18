@@ -21,6 +21,7 @@ Students Details
                 <td>{{student.first_name}}</td>
                 <td>{{student.last_name}}</td>
                 <td>{{student.email}}</td>
+                <td>{{student.date_of_birth.strftime("%d-%m-%Y")}}</td>
                 <td>
                     <a href="{{url_for('view_student', student_id=student.id)}}" class="text-info">
                         <button class="btn btn-sm btn-info">

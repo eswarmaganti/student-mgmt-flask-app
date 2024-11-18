@@ -1,32 +1,33 @@
 {% extends 'base.html' %}
+{% from "includes/form_input.html" import render_input_field with context %}
 
 {% block content %}
 <div class="col-md-6 container">
-
-    <form method="POST" class="mt-4">
-        <div class="mb-3">
-            <label for="first_name" class="pb-1">First Name *</label>
-            <input type="text" name="first_name" id="first_name" class="form-control" placeholder="Enter your first name" required/>
+    {% if status == "success" %}
+        <div class="alert alert-success text-center">
+            Student successfully registered.
         </div>
-        <div class="mb-3">
-            <label for="last_name" class="pb-1">Last Name *</label>
-            <input type="text" name="last_name" id="last_name" class="form-control" placeholder="Enter your last name" required/>
-        </div><div class="mb-3">
-            <label for="email" class="pb-1">Email Address *</label>
-            <input type="email" name="email" id="email" class="form-control" placeholder="example@example.com" required/>
-        </div><div class="mb-3">
-            <label for="age" class="pb-1">Age *</label>
-            <input type="number" name="age" id="age" class="form-control" required/>
-        </div><div class="mb-3">
-            <label for="bio" class="pb-1">Bio</label>
-        <textarea name="bio" id="bio" class="form-control" placeholder="Add your bio here"></textarea>
+    {% elif status == "error" %}
+        <div class="alert alert-danger text-center">
+            Something went wrong! Student registration failed.
+        </div>
+    {% endif %}
+    <form method="POST" class="my-5" novalidate>
+        {{render_input_field(field=form.first_name, label="First Name *", placeholder="Enter your First Name...")}}
+        {{render_input_field(field=form.last_name, label="Last Name *", placeholder="Enter your Last Name...")}}
+        {{render_input_field(field=form.email, label="Email Address *", placeholder="Enter your Email Address...")}}
+        {{render_input_field(field=form.date_of_birth, label="Date of Birth *", placeholder="Enter your Date of Birth...")}}
+        {{render_input_field(field=form.bio, label="Bio *", placeholder="Enter your Bio...")}}
+        {{render_input_field(field=form.password, label="Password *", placeholder="Enter your Password...")}}
+        {{render_input_field(field=form.confirm_password, label="Confirm Password *", placeholder="Confirm your Password...")}}
+
         <div class="mt-3">
             <button type="submit" class="btn btn-primary">
                 <i class="bi bi-person-fill-add"></i>
                 <span class="ml-2">Submit</span>
             </button>
         </div>
-        </div>
+
     </form>
 </div>
 {% endblock %}

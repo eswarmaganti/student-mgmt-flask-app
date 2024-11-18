@@ -5,18 +5,35 @@
 <a href="{{url_for('get_students')}}">
     <button class="btn btn-sm btn-dark"> <i class="bi bi-chevron-left"></i> Back</button>
 </a>
-<div class="card  mt-3">
-    <div class="card-header text-bg-info">
-        <h5 class="card-title">{{student.first_name+' '+ student.last_name}}</h5>
-    </div>
-    <div class="card-body">
-        <h6 class="card-subtitle">{{student.bio}}</h6>
-    </div>
-    <ul class="list-group">
-        <li class="list-group-item">Age: {{student.age}} years </li>
-        <li class="list-group-item">Created: {{student.created_at}}</li>
-        <li class="list-group-item">Updated: {{student.updated_at}}</li>
-    </ul>
-</div>
+    <table class="table table-striped my-5">
+        <tr>
+            <th>First Name</th>
+            <td>{{student.first_name}}</td>
+        </tr>
+        <tr>
+            <th>Last Name</th>
+            <td>{{student.last_name}}</td>
+        </tr>
+        <tr>
+            <th>Email Address</th>
+            <td>{{student.email}}</td>
+        </tr>
+        <tr>
+            <th>Date of Birth</th>
+            <td>{{student.date_of_birth}}</td>
+        </tr>
+        <tr>
+            <th>Bio</th>
+            <td>{{student.bio}}</td>
+        </tr>
+        <tr>
+            <th>Created Date</th>
+            <td>{{student.created_at.strftime("%d/%m/%Y")}}</td>
+        </tr>
+        <tr>
+            <th>Updated Date</th>
+            <td>{{student.updated_at.strftime("%d/%m/%Y")}}</td>
+        </tr>
+    </table>
 </div>
 {% endblock %}
