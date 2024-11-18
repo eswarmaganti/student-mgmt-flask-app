@@ -1,0 +1,11 @@
+{% macro render_input_field(field, label, placeholder,value="") %}
+    <div class="mb-3">
+        <label class="mb-1">{{label}}</label>
+        {{field(class='form-control', placeholder=placeholder, value=value)}}
+        {% if field.errors %}
+            {% for error in field.errors %}
+                <div class="form-text text-danger">{{error}}</div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endmacro %}
